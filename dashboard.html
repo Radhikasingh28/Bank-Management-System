@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NexBank — Dashboard</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap">
+</head>
+<body>
+
+<div class="dashboard-layout">
+
+  <!-- ===== SIDEBAR ===== -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <div class="sidebar-logo">🏦</div>
+      <div class="sidebar-title">
+        NexBank
+        <span>Digital Banking</span>
+      </div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <span class="nav-section-label">Main</span>
+      <button class="nav-item active" data-section="overview" onclick="showSection('overview')">
+        <span class="nav-icon">📊</span> Overview
+      </button>
+
+      <span class="nav-section-label">Transactions</span>
+      <button class="nav-item" data-section="deposit" onclick="showSection('deposit')">
+        <span class="nav-icon">💰</span> Deposit
+      </button>
+      <button class="nav-item" data-section="withdraw" onclick="showSection('withdraw')">
+        <span class="nav-icon">💸</span> Withdraw
+      </button>
+      <button class="nav-item" data-section="transfer" onclick="showSection('transfer')">
+        <span class="nav-icon">🔄</span> Transfer
+      </button>
+      <button class="nav-item" data-section="history" onclick="showSection('history')">
+        <span class="nav-icon">📋</span> History
+      </button>
+
+      <span class="nav-section-label">Account</span>
+      <button class="nav-item" data-section="profile" onclick="showSection('profile')">
+        <span class="nav-icon">👤</span> Profile
+      </button>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="user-chip">
+        <div class="user-avatar" id="user-avatar-sidebar">R</div>
+        <div class="user-chip-info">
+          <div class="user-chip-name" id="user-name">User</div>
+          <div class="user-chip-acc"  id="acc-number">ACC----</div>
+        </div>
+      </div>
+      <button class="btn btn-danger btn-full" onclick="handleLogout()">🚪 Logout</button>
+    </div>
+  </aside>
+
+  <!-- ===== MAIN ===== -->
+  <div class="main-content">
+
+    <!-- Topbar -->
+    <header class="topbar">
+      <div style="display:flex;align-items:center;gap:.75rem;">
+        <button class="hamburger" id="hamburger">☰</button>
+        <div class="topbar-left">
+          <h2 id="topbar-title">Overview</h2>
+          <p>Welcome back 👋</p>
+        </div>
+      </div>
+      <div class="topbar-right">
+        <button class="dark-toggle" onclick="toggleDarkMode()" title="Toggle dark mode">
+          <span id="dark-icon">🌙</span>
+        </button>
+      </div>
+    </header>
+
+    <main class="page-content">
+
+      <!-- ===== OVERVIEW ===== -->
+      <section class="section active" id="sec-overview">
+        <!-- Balance Hero -->
+        <div class="balance-hero">
+          <div class="balance-label">Total Balance</div>
+          <div class="balance-amount" id="balance-display">₹0.00</div>
+          <div class="balance-acc" id="balance-acc-display"></div>
+        </div>
+
+        <!-- Stats -->
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-icon green">💵</div>
+            <div class="stat-info">
+              <p>Total Deposited</p>
+              <h3 id="stat-deposit">₹0.00</h3>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon red">📤</div>
+            <div class="stat-info">
+              <p>Total Withdrawn</p>
+              <h3 id="stat-withdraw">₹0.00</h3>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon purple">🔄</div>
+            <div class="stat-info">
+              <p>Total Transferred</p>
+              <h3 id="stat-transfer">₹0.00</h3>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon blue">📋</div>
+            <div class="stat-info">
+              <p>Transactions</p>
+              <h3 id="stat-txn-count">0</h3>
+            </div>
+          </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <p class="section-title">Quick Actions</p>
+        <div class="action-grid">
+          <button class="action-btn" onclick="showSection('deposit')">
+            <div class="action-icon deposit">💰</div>
+            <div>
+              <h3>Deposit Money</h3>
+              <p>Add funds to your account</p>
+            </div>
+          </button>
+          <button class="action-btn" onclick="showSection('withdraw')">
+            <div class="action-icon withdraw">💸</div>
+            <div>
+              <h3>Withdraw Money</h3>
+              <p>Cash out from your balance</p>
+            </div>
+          </button>
+          <button class="action-btn" onclick="showSection('transfer')">
+            <div class="action-icon transfer">🔄</div>
+            <div>
+              <h3>Transfer Money</h3>
+              <p>Send to another account</p>
+            </div>
+          </button>
+        </div>
+      </section>
+
+      <!-- ===== DEPOSIT ===== -->
+      <section class="section" id="sec-deposit">
+        <div class="form-card">
+          <h3>💰 Deposit Money</h3>
+          <div class="form-group">
+            <label for="dep-amount">Amount (₹)</label>
+            <input type="number" id="dep-amount" placeholder="Enter amount" min="1" />
+          </div>
+          <div id="dep-msg" class="txn-msg"></div>
+          <button class="btn btn-primary" onclick="handleDeposit()" style="margin-top:.75rem;width:100%">
+            Deposit
+          </button>
+        </div>
+      </section>
+
+      <!-- ===== WITHDRAW ===== -->
+      <section class="section" id="sec-withdraw">
+        <div class="form-card">
+          <h3>💸 Withdraw Money</h3>
+          <div class="form-group">
+            <label for="wdw-amount">Amount (₹)</label>
+            <input type="number" id="wdw-amount" placeholder="Enter amount" min="1" />
+          </div>
+          <div id="wdw-msg" class="txn-msg"></div>
+          <button class="btn btn-primary" onclick="handleWithdraw()" style="margin-top:.75rem;width:100%">
+            Withdraw
+          </button>
+        </div>
+      </section>
+
+      <!-- ===== TRANSFER ===== -->
+      <section class="section" id="sec-transfer">
+        <div class="form-card">
+          <h3>🔄 Transfer Money</h3>
+          <div style="display:flex;flex-direction:column;gap:1rem;">
+            <div class="form-group">
+              <label for="receiver-email">Receiver's Email</label>
+              <input type="email" id="receiver-email" placeholder="friend@example.com" />
+            </div>
+            <div class="form-group">
+              <label for="transfer-amount">Amount (₹)</label>
+              <input type="number" id="transfer-amount" placeholder="Enter amount" min="1" />
+            </div>
+          </div>
+          <div id="transfer-msg" class="txn-msg"></div>
+          <button class="btn btn-primary" onclick="handleTransfer()" style="margin-top:.75rem;width:100%">
+            Send Money
+          </button>
+        </div>
+      </section>
+
+      <!-- ===== HISTORY ===== -->
+      <section class="section" id="sec-history">
+        <div class="history-controls">
+          <input type="text" id="txn-search" placeholder="🔍 Search transactions…" />
+          <select id="txn-filter">
+            <option value="All">All Types</option>
+            <option value="Deposit">Deposit</option>
+            <option value="Withdrawal">Withdrawal</option>
+            <option value="Transfer Sent">Transfer Sent</option>
+            <option value="Transfer Received">Transfer Received</option>
+          </select>
+          <select id="txn-sort">
+            <option value="newest">Newest First</option>
+            <option value="oldest">Oldest First</option>
+            <option value="highest">Highest Amount</option>
+            <option value="lowest">Lowest Amount</option>
+          </select>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Type</th>
+                <th>Amount</th>
+                <th>Note</th>
+                <th>Date & Time</th>
+              </tr>
+            </thead>
+            <tbody id="txn-tbody"></tbody>
+          </table>
+          <div class="txn-empty" id="txn-empty">No transactions found 📭</div>
+        </div>
+      </section>
+
+      <!-- ===== PROFILE ===== -->
+      <section class="section" id="sec-profile">
+        <div class="profile-card">
+          <div class="profile-avatar-big" id="profile-avatar">R</div>
+          <div class="profile-info">
+            <div class="profile-row">
+              <span class="label">Name</span>
+              <span class="value" id="profile-name">—</span>
+            </div>
+            <div class="profile-row">
+              <span class="label">Email</span>
+              <span class="value" id="profile-email">—</span>
+            </div>
+            <div class="profile-row">
+              <span class="label">Account No.</span>
+              <span class="value" id="profile-acc">—</span>
+            </div>
+            <div class="profile-row">
+              <span class="label">Balance</span>
+              <span class="value" id="profile-bal">—</span>
+            </div>
+          </div>
+
+          <div class="divider"></div>
+          <p style="font-size:.85rem;font-weight:600;margin-bottom:.75rem;">Edit Name</p>
+          <form onsubmit="handleProfileUpdate(event)" novalidate>
+            <div style="display:flex;flex-direction:column;gap:.75rem;">
+              <div class="form-group">
+                <label for="edit-name-input">New display name</label>
+                <input type="text" id="edit-name-input" placeholder="Enter your name" />
+              </div>
+              <div id="profile-msg" class="txn-msg"></div>
+              <button type="submit" class="btn btn-primary">Save Changes</button>
+            </div>
+          </form>
+        </div>
+      </section>
+
+    </main>
+  </div><!-- end main-content -->
+</div><!-- end dashboard-layout -->
+
+<script src="js/storage.js"></script>
+<script src="js/transaction.js"></script>
+<script src="js/dashboard.js"></script>
+
+<script>
+  // Keep topbar title + avatar initials in sync
+  const origShowSection = showSection;
+  const titles = {
+    overview: "Overview", deposit: "Deposit", withdraw: "Withdraw",
+    transfer: "Transfer", history: "History", profile: "Profile"
+  };
+  showSection = function(name) {
+    origShowSection(name);
+    document.getElementById("topbar-title").textContent = titles[name] || name;
+  };
+
+  // Set avatar initials on load
+  window.addEventListener("DOMContentLoaded", () => {
+    const u = getCurrentUser();
+    if (u) {
+      const initials = u.name.split(" ").map(w => w[0]).join("").toUpperCase().slice(0, 2);
+      document.getElementById("user-avatar-sidebar").textContent = initials;
+      if (document.getElementById("profile-avatar"))
+        document.getElementById("profile-avatar").textContent = initials;
+      if (document.getElementById("balance-acc-display"))
+        document.getElementById("balance-acc-display").textContent = u.accountNumber || "";
+    }
+  });
+</script>
+</body>
+</html>
